@@ -33,7 +33,7 @@ MIN_REPLAY_SIZE = 50000
 # Log file path
 LOG_FILE = "output.log"
 # Take snapshots
-SNAPSHOT_EVERY = 2000
+SNAPSHOT_EVERY = 100000
 SNAPSHOT_PREFIX = 'snapshots/qmlp'
 # How much prioritization to use
 ALPHA = 0.6
