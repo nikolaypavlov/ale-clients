@@ -41,6 +41,8 @@ ALPHA = 0.6
 BETA = 0.6
 # Image input size
 DIMS = (1, 84, 84)
+# Double Deep Q-Learning
+DDQN = False
 
 class DeepQAgent(RLAgent):
     """Q-Learning agent with Deep network function approximation"""
@@ -58,6 +60,8 @@ class DeepQAgent(RLAgent):
         self.start_learning = False
         self.replay = ExperienceReplay(capacity=REPLAY_CAPACITY)
         self.stats = {}
+        self.frame_buf = np.zeros(DIMS)
+        self.frame_num = 0
 
         logging.basicConfig(filename=LOG_FILE, level=logging.INFO)
         self.snapshot = Snapshot(SNAPSHOT_PREFIX)
@@ -161,7 +165,7 @@ class DeepQAgent(RLAgent):
 
                     if self.isTerminalState(b_new_state):
                         target[i].fill(b_reward)
-                    else:
+                    elif DDQN:
                         # Double Q-learning target
                         shape = np.append(-1, b_new_state.shape)
                         act = np.argmax(self.predict(b_new_state.reshape(shape).astype(theano.config.floatX)), 1)
@@ -169,6 +173,9 @@ class DeepQAgent(RLAgent):
                         t = b_reward + self.gamma * np.ravel(q_vals)
                         target[i] = np.tile(t[act] - 1, self.actionsNum)
                         target[i][act] = t[act]
+                    else:
+                        q_vals = self.predictTarget(b_new_state.reshape(shape).astype(theano.config.floatX))
+                        target[i] = b_reward + self.gamma * q_vals
 
                 assert(target.shape == (BATCH_SIZE, self.actionsNum))
                 loss, target_val, net_out, err, maxQ_idx = self.train(features.astype(theano.config.floatX), target.astype(theano.config.floatX))
