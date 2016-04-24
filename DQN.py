@@ -162,12 +162,12 @@ class DeepQAgent(RLAgent):
 
                 for i, (b_state, b_action, b_reward, b_new_state) in enumerate(batch):
                     features[i] = b_state
+                    shape = np.append(-1, b_new_state.shape)
 
                     if self.isTerminalState(b_new_state):
                         target[i].fill(b_reward)
                     elif DDQN:
                         # Double Q-learning target
-                        shape = np.append(-1, b_new_state.shape)
                         act = np.argmax(self.predict(b_new_state.reshape(shape).astype(theano.config.floatX)), 1)
                         q_vals = self.predictTarget(b_new_state.reshape(shape).astype(theano.config.floatX))
                         t = b_reward + self.gamma * np.ravel(q_vals)
