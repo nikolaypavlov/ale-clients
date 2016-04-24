@@ -26,10 +26,10 @@ GAMMA = 0.99
 EPS0 = 1.0
 EPS = 0.1
 # Synchronise target model afterwhile
-SYNC_TARGET_MODEL = 2000
+SYNC_TARGET_MODEL = 5000
 # Wait till replay accumulate some experience than start learning
-REPLAY_CAPACITY = 15000
-MIN_REPLAY_SIZE = 4096
+REPLAY_CAPACITY = 250000
+MIN_REPLAY_SIZE = 50000
 # Log file path
 LOG_FILE = "output.log"
 # Take snapshots

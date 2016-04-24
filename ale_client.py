@@ -3,12 +3,10 @@
 import sys
 import numpy as np
 import argparse
-from random import randrange
 from ale_python_interface import ALEInterface
 from DQN import DeepQAgent
 
-MAX_ITERS = 10000
-NUM_SCREEN = 1
+MAX_ITERS = 1000000
 
 def init_ale(rom, display):
     ale = ALEInterface()
